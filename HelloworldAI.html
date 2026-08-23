@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello User</title>
+    <link rel="stylesheet" href="HelloworldAI.css">
+</head>
+<body>
+    <main class="greeting-card">
+        <h1>Hello!</h1>
+        <p>Enter your name to get a greeting.</p>
+
+        <form id="name-form">
+            <label for="name-input">Your name</label>
+            <input id="name-input" name="name" type="text" autocomplete="name" required>
+            <button type="submit">Say hello</button>
+        </form>
+
+        <p id="greeting" aria-live="polite"></p>
+    </main>
+
+    <script src="HelloworldAI.js"></script>
+</body>
+</html>

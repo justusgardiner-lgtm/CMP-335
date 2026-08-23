@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang= "en">
+
+<head>
+    <meta charset ="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> document </title>
+
+    <link rel = "stylesheet" href="Hello.css">
+
+    <script>
+        function myfunction(){
+            var newname = document.getElementById("fname").value;
+            document.getElementById("greeting").innerHTML = "Hello" + newname + " !";
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1> Hello!</h1>
+
+    <form>
+    <label for="fname"> What's your name </label>
+    <input type="text" id="fname" name="fname" ><br>
+    </form>
+    <button type= "text" onclick="myfunction()"> Press me</button>
+
+    <br>
+    <p id="greeting"></p>
+    <br>
+
+</body>
+</html>
