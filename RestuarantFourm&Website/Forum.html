@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+    <link rel="stylesheet" href="Forum.css">
+
+</head>
+
+<body>
+
+<h1>Restaurant Survey</h1>
+<h2>Welcome to the Restaurant survey!</h2>
+<p>We would love to hear your feedback about your dining experience.
+
+<form>
+
+
+  <label id="fname-label" for="fname">First name:</label><br>
+  <input type="text" id="fname" name="fname" placeholder="Enter your first name" required><br>
+  <label id="lname-label" for="lname">Last name:</label><br>
+  <input type="text" id="lname" name="lname" placeholder="Enter your last name" required><br>
+
+<p> Choose your party size:</p>
+  <input type="checkbox" id="Party1" name="Party1" value="1">
+  <label for="Party1"> 1 </label><br>
+  <input type="checkbox" id="Party2" name="Party2" value="2">
+  <label for="Party2"> 2 </label><br>
+  <input type="checkbox" id="Party3" name="Party3" value="3">
+  <label for="Party3"> 3 </label>
+  <input type="checkbox" id="Party4" name="Party4" value="4">
+  <label for="Party4"> 4 </label><br>
+  <input type="checkbox" id="Party5" name="Party5" value="5">
+  <label for="Party5"> more </label>
+
+  <br/>
+
+  <p> Choose your satisfaction level with:</p>
+  <input type="radio" id="Happy" name="Satisfaction" value="HTML">
+  <label for="Happy">Happy</label><br>
+  <input type="radio" id="Neutral" name="Satisfaction" value="CSS">
+  <label for="Neutral">Neutral</label><br>
+  <input type="radio" id="Unhappy" name="Satisfaction" value="JavaScript">
+  <label for="Unhappy">Unhappy</label><br>
+
+  <br/>
+ <label for="Waiter">Rate your waiter:</label><br>
+  <select id="Waiter" name="Waiter">
+    <option value="Excellent">Excellent</option>
+    <option value="Good">Good</option>
+    <option value="Average">Average</option>
+    <option value="Poor">Poor</option>
+  </select><br>
+  <br/>
+  <label id="feedback-label" for="feedback">Enter feedback:</label><br>
+  <textarea id="feedBack" name="feedback" placeholder="Enter your feedback" required></textarea><br>
+  <br/>
+
+  <input type="submit" value="Submit Survey" onclick="Namefunction()">
+</form>
+
+<script>
+function Namefunction() {
+  if (document.getElementById("fname").value == "" || document.getElementById("lname").value == "" || document.getElementById("feedBack").value == "") {
+    alert("Please fill out required fields before submitting the survey.");
+  document.getElementById("fname-label").classList.add("error");
+  document.getElementById("lname-label").classList.add("error");
+  document.getElementById("feedback-label").classList.add("error");
+  document.getElementById("feedback-label").textContent ="Feedback is required";
+  document.getElementById("fname-label").textContent = "First name is required.";
+  document.getElementById("lname-label").textContent = "Last name is required.";
+
+    return false;
+  }
+
+  alert("Thank you for your feedback!");
+}
+</script>
+
+</body>
+
+</html>

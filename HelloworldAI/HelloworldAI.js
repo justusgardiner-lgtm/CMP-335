@@ -6,5 +6,5 @@ nameForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const name = nameInput.value.trim();
-    greeting.textContent = `Hello, ${name} I hate your ass!`;
+    greeting.textContent = `Hello, ${name} !`;
 });
