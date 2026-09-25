@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Check whether a word or phrase is a palindrome." />
+    <title>Palindrome Checker</title>
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="pali.js" defer></script>
+  </head>
+  <body>
+    <main class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+          <section class="card shadow-sm">
+            <div class="card-body p-4 p-md-5">
+              <h1 class="card-title mb-4">Palindrome Checker</h1>
+              <form onsubmit="wordCheck(); return false;">
+                <div class="mb-3">
+                  <label class="form-label" for="wordInput">Enter a word or phrase</label>
+                  <input class="form-control" type="text" id="wordInput" name="wordInput" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="algorithm">Select an algorithm</label>
+                  <select class="form-select" id="algorithm" name="algorithm">
+                    <option value="1">Two-pointer comparison</option>
+                    <option value="2">Reverse the string</option>
+                    <option value="3">Stack comparison</option>
+                  </select>
+                </div>
+                <div class="form-check mb-4">
+                  <input class="form-check-input" type="checkbox" id="caseSensitive" name="caseSensitive" />
+                  <label class="form-check-label" for="caseSensitive">Case sensitive</label>
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Check</button>
+              </form>
+              <div class="mt-4" aria-live="polite">
+                <h2 class="h5">Result</h2>
+                <p id="result" class="mb-0 text-body-secondary">Enter a word to begin.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
