@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA MVP Manager</title>
+  <script src="Hcollection.js" defer></script>
+</head>
+<body>
+  <h1>NBA MVP Manager</h1>
+
+  <p id="status" role="status"></p>
+
+  <h2 id="form-title">Add an MVP</h2>
+
+  <form id="mvp-form">
+    <input type="hidden" id="mvp-id">
+
+    <label for="player">Player Name</label>
+    <input type="text" id="player" required>
+
+    <br><br>
+
+    <label for="mvp-count">MVP Count</label>
+    <input type="number" id="mvp-count" min="1" required>
+
+    <br><br>
+
+    <label for="seasons">MVP Seasons</label>
+    <input
+      type="text"
+      id="seasons"
+      placeholder="2020-21, 2021-22"
+      required
+    >
+
+    <p>Separate seasons with commas.</p>
+
+    <button type="submit" id="save-button">Add MVP</button>
+    <button type="button" id="cancel-button" hidden>
+      Cancel Edit
+    </button>
+  </form>
+
+  <h2>All MVPs</h2>
+
+  <button type="button" id="refresh-button">
+    Refresh List
+  </button>
+
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Player</th>
+        <th>MVP Count</th>
+        <th>Seasons</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="mvp-list"></tbody>
+  </table>
+</body>
+</html>
