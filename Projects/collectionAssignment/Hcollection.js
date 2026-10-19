@@ -1,132 +1,161 @@
 
 // API address for the NBA MVP records
-const uri = 'api/mvps';
+const uri = '/api/mvps';
+
+// Store the MVP records
 let MVPs = [];
 
 // Get all MVPs from the API
 function getMVPs() {
-  fetch(uri)
-    .then(response => response.json())
-    .then(data => _displayMVPs(data))
-    .catch(error => console.error('Unable to get MVPs.', error));
+    fetch(uri)
+        .then(response => response.json())
+        .then(data => displayMVPs(data))
+        .catch(error => console.error('Unable to get MVPs.', error));
 }
 
 // Add a new MVP
 function addMVP() {
-  const playerTextbox = document.getElementById('add-player');
-  const countTextbox = document.getElementById('add-count');
-  const seasonsTextbox = document.getElementById('add-seasons');
+    const id = document.getElementById('mvp-id').value;
 
-  const mvp = {
-    player: playerTextbox.value.trim(),
-    mvp_count: Number(countTextbox.value),
-    seasons: seasonsTextbox.value.split(',').map(s => s.trim())
-  };
+    // Get the information from the form
+    const mvp = {
+        player: document.getElementById('player').value.trim(),
+        mvp_count: Number(document.getElementById('mvp-count').value),
+        seasons: document.getElementById('seasons').value
+            .split(',')
+            .map(s => s.trim())
+    };
 
-  fetch(uri, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(mvp)
-  })
-    .then(() => {
-      getMVPs();
-      playerTextbox.value = '';
-      countTextbox.value = '';
-      seasonsTextbox.value = '';
+    // Choose whether to add or update an MVP
+    let url = uri;
+    let method = 'POST';
+
+    if (id !== '') {
+        url = uri + '/' + id;
+        method = 'PUT';
+        mvp.id = Number(id);
+    }
+
+    // Send the MVP information to the API
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(mvp)
     })
-    .catch(error => console.error('Unable to add MVP.', error));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Unable to save MVP.');
+            }
+
+            // Clear the form and reload the list
+            document.getElementById('mvp-form').reset();
+            document.getElementById('mvp-id').value = '';
+            document.getElementById('form-title').textContent = 'Add an MVP';
+            document.getElementById('save-button').textContent = 'Add MVP';
+            document.getElementById('cancel-button').hidden = true;
+
+            getMVPs();
+        })
+        .catch(error => console.error('Unable to save MVP.', error));
 }
 
 // Delete an MVP
 function deleteMVP(id) {
-  fetch(`${uri}/${id}`, {
-    method: 'DELETE'
-  })
-    .then(() => getMVPs())
-    .catch(error => console.error('Unable to delete MVP.', error));
+    if (confirm('Are you sure you want to delete this MVP?')) {
+        fetch(uri + '/' + id, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unable to delete MVP.');
+                }
+
+                getMVPs();
+            })
+            .catch(error => console.error('Unable to delete MVP.', error));
+    }
 }
 
-// Display the form to edit an MVP
-function displayEditForm(id) {
-  const mvp = MVPs.find(mvp => mvp.id === id);
+// Load an MVP into the form for editing
+function editMVP(id) {
+    // Find the MVP in the list
+    const mvp = MVPs.find(mvp => mvp.id === id);
 
-  document.getElementById('edit-player').value = mvp.player;
-  document.getElementById('edit-count').value = mvp.mvp_count;
-  document.getElementById('edit-seasons').value = mvp.seasons.join(', ');
-  document.getElementById('edit-id').value = mvp.id;
+    if (!mvp) {
+        return;
+    }
 
-  document.getElementById('editForm').style.display = 'block';
-}
+    // Fill in the form with the MVP's information
+    document.getElementById('mvp-id').value = mvp.id;
+    document.getElementById('player').value = mvp.player;
+    document.getElementById('mvp-count').value = mvp.mvp_count;
+    document.getElementById('seasons').value = mvp.seasons.join(', ');
 
-// Update an existing MVP
-function updateMVP() {
-  const mvpId = document.getElementById('edit-id').value;
-
-  const mvp = {
-    id: parseInt(mvpId, 10),
-    player: document.getElementById('edit-player').value.trim(),
-    mvp_count: Number(document.getElementById('edit-count').value),
-    seasons: document.getElementById('edit-seasons').value
-      .split(',')
-      .map(s => s.trim())
-  };
-
-  fetch(`${uri}/${mvpId}`, {
-    method: 'PUT',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(mvp)
-  })
-    .then(() => getMVPs())
-    .catch(error => console.error('Unable to update MVP.', error));
-
-  closeInput();
-  return false;
-}
-
-// Close the edit form
-function closeInput() {
-  document.getElementById('editForm').style.display = 'none';
+    // Change the form to editing mode
+    document.getElementById('form-title').textContent = 'Edit MVP';
+    document.getElementById('save-button').textContent = 'Update MVP';
+    document.getElementById('cancel-button').hidden = false;
 }
 
 // Display all MVPs in the table
-function _displayMVPs(data) {
-  const tBody = document.getElementById('mvps');
-  tBody.innerHTML = '';
+function displayMVPs(data) {
+    // Find the table body in your HTML
+    const list = document.getElementById('mvp-list');
 
-  const button = document.createElement('button');
+    // Clear the old rows
+    list.innerHTML = '';
 
-  data.forEach(mvp => {
-    // Create the Edit button
-    let editButton = button.cloneNode(false);
-    editButton.innerText = 'Edit';
-    editButton.setAttribute('onclick', `displayEditForm(${mvp.id})`);
+    // Save the records for the edit function
+    MVPs = data;
 
-    // Create the Delete button
-    let deleteButton = button.cloneNode(false);
-    deleteButton.innerText = 'Delete';
-    deleteButton.setAttribute('onclick', `deleteMVP(${mvp.id})`);
+    // Add each MVP to the table
+    MVPs.forEach(mvp => {
+        const row = list.insertRow();
 
-    // Create a table row for the MVP
-    let tr = tBody.insertRow();
+        row.insertCell(0).textContent = mvp.id;
+        row.insertCell(1).textContent = mvp.player;
+        row.insertCell(2).textContent = mvp.mvp_count;
+        row.insertCell(3).textContent = mvp.seasons.join(', ');
 
-    tr.insertCell(0).textContent = mvp.id;
-    tr.insertCell(1).textContent = mvp.player;
-    tr.insertCell(2).textContent = mvp.mvp_count;
-    tr.insertCell(3).textContent = mvp.seasons.join(', ');
+        // Create the Edit and Delete buttons
+        const actions = row.insertCell(4);
 
-    tr.insertCell(4).appendChild(editButton);
-    tr.insertCell(5).appendChild(deleteButton);
-  });
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = function() {
+            editMVP(mvp.id);
+        };
 
-  // Save the list for the edit function
-  MVPs = data;
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = function() {
+            deleteMVP(mvp.id);
+        };
+
+        actions.appendChild(editButton);
+        actions.appendChild(deleteButton);
+    });
 }
+
+// Submit the form when adding or updating an MVP
+document.getElementById('mvp-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    addMVP();
+});
+
+// Cancel editing and clear the form
+document.getElementById('cancel-button').addEventListener('click', function() {
+    document.getElementById('mvp-form').reset();
+    document.getElementById('mvp-id').value = '';
+    document.getElementById('form-title').textContent = 'Add an MVP';
+    document.getElementById('save-button').textContent = 'Add MVP';
+    this.hidden = true;
+});
+
+// Refresh the MVP list when the button is clicked
+document.getElementById('refresh-button').addEventListener('click', getMVPs);
 
 // Load the MVPs when the page opens
 getMVPs();
