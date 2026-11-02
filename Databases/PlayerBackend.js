@@ -34,7 +34,12 @@ app.get('/players', (req, res) => {
 });
 
 app.post('/insert', (req, res) => {
+  if (!req.body.playerName || req.body.playerName.trim() === "") {
+    return res.status(400).send("Player name cannot be empty.");
+  }
+
   const con = connectToDatabase();
+
   const sql = `INSERT INTO players (playerName, playerStats, playerTeam)
    VALUES ('${req.body.playerName}', '${req.body.playerStats}', '${req.body.playerTeam}')`;
 
@@ -45,6 +50,7 @@ app.post('/insert', (req, res) => {
 
     con.query(sql, function (err, result) {
       if (err) {
+        con.end();
         return res.status(500).send("Could not insert player");
       }
 
