@@ -1,9 +1,14 @@
+// REST API for CRUD operations on the "players" table in MySQL.
+// Endpoints: GET /players, GET /select/:playerid, POST /insert,
+//            PUT /update/:playerid, DELETE /delete/:playerid
+
 const express = require('express');
 let mysql = require('mysql2');
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // lets us read JSON request bodies
 
+// Creates a new MySQL connection (caller must connect and end it)
 function connectToDatabase() {
   let con = mysql.createConnection({
     host: "localhost",
@@ -14,6 +19,7 @@ function connectToDatabase() {
   return con;
 }
 
+// Get all players
 app.get('/players', (req, res) => {
   const con = connectToDatabase();
 
@@ -33,6 +39,7 @@ app.get('/players', (req, res) => {
   });
 });
 
+// Add a new player (playerName is required)
 app.post('/insert', (req, res) => {
   if (!req.body.playerName || req.body.playerName.trim() === "") {
     return res.status(400).send("Player name cannot be empty.");
@@ -60,6 +67,7 @@ app.post('/insert', (req, res) => {
   });
 });
 
+// Update a player by ID
 app.put('/update/:playerid', (req, res) => {
   const con = connectToDatabase();
   const sql = `UPDATE players SET playerName = '${req.body.playerName}', playerStats = '${req.body.playerStats}', playerTeam = '${req.body.playerTeam}' WHERE playerid = '${req.params.playerid}'`;
@@ -80,6 +88,7 @@ app.put('/update/:playerid', (req, res) => {
   });
 });
 
+// Delete a player by ID
 app.delete('/delete/:playerid', (req, res) => {
   const con = connectToDatabase();
   const sql = `DELETE FROM players WHERE playerid = '${req.params.playerid}'`;
@@ -100,6 +109,7 @@ app.delete('/delete/:playerid', (req, res) => {
   });
 });
 
+// Get one player by ID
 app.get('/select/:playerid', (req, res) => {
   const con = connectToDatabase();
   const sql = `SELECT * FROM players WHERE playerid = '${req.params.playerid}'`;
@@ -120,6 +130,7 @@ app.get('/select/:playerid', (req, res) => {
   });
 });
 
+// Start the server on port 3000
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });

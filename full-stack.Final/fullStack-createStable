@@ -1,0 +1,24 @@
+let mysql = require('mysql2');
+
+let con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "CMP335",
+  database: "registration"
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+  let sql = `CREATE TABLE Students (
+    studentid INT AUTO_INCREMENT PRIMARY KEY,
+    studentName VARCHAR(225) NOT NULL,
+    studentLastN VARCHAR(225) NOT NULL,
+    studentEmail VARCHAR(225) NULL
+  )`;
+
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("Table Students created");
+  });
+});
